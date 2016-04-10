@@ -1,39 +1,32 @@
 //
-//  ViewController.m
+//  DSMeViewController.m
 //  testTabelViewGroup
 //
-//  Created by baishangshang on 16/2/26.
+//  Created by baishangshang on 16/3/28.
 //  Copyright © 2016年 dscm. All rights reserved.
 //
-
 #define ScreenW 375
 
 #define centerY center.y
 
-#import "ViewController.h"
 #import "TSMyBtn.h"
 #import "AFNetworking.h"
 #import "DSSettingViewController.h"
 #import "DSMeViewController.h"
 
-@interface ViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface DSMeViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (weak,nonatomic) UITableView *tableview;
 
-@property (weak,nonatomic) UILabel *testLabel;
-
-@property (nonatomic,assign) int i;
 @end
 
-@implementation ViewController
-
-
+@implementation DSMeViewController
 
 //创建顶部视图
 -(void)createTopView
 {
     UIView *top = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 180)];
-//    self.topView = top;
+    //    self.topView = top;
     top.backgroundColor = [UIColor orangeColor];
     [self.view addSubview:top];
     //背景图片
@@ -43,17 +36,17 @@
     
     //添加头像背景
     UIImageView *headerBack = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
-   
+    
     headerBack.center = CGPointMake(ScreenW/2, 130);
-//    headerBack.center.y = 70;
-//    headerBack.center.x = ScreenW/2;
+    //    headerBack.center.y = 70;
+    //    headerBack.center.x = ScreenW/2;
     headerBack.image = [UIImage imageNamed:@"ic_wo_touxiang_bg"];
     [top addSubview:headerBack];
     
     //添加头像
     UIImageView *header = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-//    header.centerY = 70;
-//    header.centerX = ScreenW/2;
+    //    header.centerY = 70;
+    //    header.centerX = ScreenW/2;
     header.center =CGPointMake(ScreenW/2, 130);
     header.image = [UIImage imageNamed:@"ic_mrtx"];
     [top addSubview:header];
@@ -66,8 +59,8 @@
     name.font = [UIFont boldSystemFontOfSize:13];
     name.textColor = [UIColor whiteColor];
     name.center = CGPointMake(self.view.frame.size.width * 0.5, 170);
-//    name.centerX = ScreenW/2;
-//    name.centerY = 140;
+    //    name.centerX = ScreenW/2;
+    //    name.centerY = 140;
     
     //添加关注数(demo已删除？)
     //    UILabel *guanzhu = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 10)];
@@ -93,42 +86,13 @@
     
     DSSettingViewController *setting = [[DSSettingViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:setting];
-    
-//    [self.navigationController pushViewController:setting animated:YES];
+//    self.navigationController.navigationBar.barTintColor ＝ [UIColor blueColor];
+    //    [self.navigationController pushViewController:setting animated:YES];
     [self presentViewController:nav animated:YES completion:^{
         
     }];
 }
 
--(void)testTap:(UIButton *)testBtn{
-    NSLog(@"testTap");
-    
-    
-    if (testBtn.selected) {//取消收藏
-        [testBtn setTitle:@"选中" forState:UIControlStateSelected];
-//        NSLog(@"%@",self.testLabel.text);
-//        NSString *text = self.testLabel.text;
-//        int testInt = text.intValue;
-//        self.testLabel.text = [NSString stringWithFormat:@"%d",testInt--];
-//        NSLog(@"%@",testBtn.selected);
-//        testBtn.selected = YES;
-        
-        self.i--;
-        NSLog(@"%d",self.i);
-    }else{//收藏
-        [testBtn setTitle:@"没选中" forState:UIControlStateNormal];
-//        NSString *text = self.testLabel.text;
-//        int testInt = text.intValue;
-//        self.testLabel.text = [NSString stringWithFormat:@"%d",testInt++];
-//        testBtn.selected = NO;
-        
-        self.i++;
-        NSLog(@"%d",self.i);//这个数字应该是要存在服务器的。统计数据。userId。
-    }
-    
-    testBtn.selected = !testBtn.isSelected;
-//    self.testLabel.text= [NSString stringWithFormat:@"11"];
-}
 
 - (void)viewDidLoad {
     
@@ -137,34 +101,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-//    self.i = 10;
-    
-    
-    //test UIImageView   UILabel   Uitap
-//    UILabel *testLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 100, 100, 30)];
-//    testLabel.backgroundColor = [UIColor orangeColor];
-//    testLabel.userInteractionEnabled = YES;
-////    testLabel.enabled = YES;
-//    [self.view addSubview:testLabel];
-//    testLabel.text = [NSString stringWithFormat:@"10"];
-//    self.testLabel = testLabel;
-//    [testLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(testTap)]];
-    
-   
-    
-    UIButton *testBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    testBtn.center = self.view.center;
-    testBtn.frame = CGRectMake(200, 200, 100, 30);
-    testBtn.backgroundColor = [UIColor orangeColor];
-    [self.view addSubview:testBtn];
-    testBtn.selected = YES;
-    
-    
-    [testBtn addTarget:self action:@selector(add) forControlEvents:UIControlEventTouchUpInside];
-    
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-//    tableView.backgroundColor = [UIColor orangeColor];
+    //    tableView.backgroundColor = [UIColor orangeColor];
     tableView.delegate = self;
     tableView.dataSource = self;
     [self.view addSubview:tableView];
@@ -181,22 +120,17 @@
     [self createTopView];
 }
 
--(void)add{
-    DSMeViewController *me = [[DSMeViewController alloc] init];
-    [self presentViewController:me animated:YES completion:nil];
-}
-
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 4;
-//    return self.testGroups.count;
+    //    return self.testGroups.count;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-//    return self.testGroups[section].count;
-//    NSArray *subArray = self.testGroups[section];
-//    return subArray.count;
+    //    return self.testGroups[section].count;
+    //    NSArray *subArray = self.testGroups[section];
+    //    return subArray.count;
     
     if (section == 1) {
         return 3;
@@ -214,10 +148,10 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     cell.textLabel.text = @"你大爷";
-
+    
     
     NSArray *nameArr = @[@"收藏",@"我的足迹"];
-
+    
     if (indexPath.section == 0 &&indexPath.row == 0) {
         cell.accessoryType = UITableViewCellAccessoryNone;
         
@@ -241,7 +175,7 @@
             divider.backgroundColor = [UIColor lightGrayColor];
             [cell.contentView addSubview:divider];
         }
-
+        
     }else if(indexPath.section == 1){
         NSArray *myArray = @[@"我的消息",@"我的订单",@"我的地址",@"我关注的供应商",@"客服"];
         cell.textLabel.text = myArray[indexPath.row];
@@ -255,7 +189,7 @@
     }else if (indexPath.section == 3){
         cell.textLabel.text =@"客服  400-032-3320";
         cell.textLabel.textColor = [UIColor orangeColor];
-//        cell.imageView.image = [UIImage imageNamed:@"客服"];
+        //        cell.imageView.image = [UIImage imageNamed:@"客服"];
         
     }
     
@@ -286,9 +220,5 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 @end

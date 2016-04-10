@@ -6,11 +6,14 @@
 //  Copyright © 2016年 dscm. All rights reserved.
 //
 
+#define ScreenW self.view.frame.size.width
+
 #import "DSSettingViewController.h"
 #import "DSBindingPhoneViewController.h"
 #import "UMSocial.h"
+#import "DSAboutUsViewController.h"
 
-@interface DSSettingViewController ()<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate>
+@interface DSSettingViewController ()<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIActionSheetDelegate>
 
 @property (weak,nonatomic) UITableView *tableview;
 
@@ -36,6 +39,7 @@
     [self setupNav];
     
     self.view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor orangeColor];
     
     //添加tableview
     [self setupTableView];
@@ -117,43 +121,22 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
     
-//    NSArray *nameArr = @[@"系统设置",@"绑定手机号"];
-//    NSArray *nameArr1 = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"test.plist" ofType:nil]];
-//    
-//    if (indexPath.section == 0 ) {
-//        //添加俩个自定义按钮
-//        cell.textLabel.text = nameArr1[indexPath.row];
-//        
-//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//       
-//        cell.imageView.image = [UIImage imageNamed:nameArr1[indexPath.row]];
-//    }else if(indexPath.section == 1){
-//        NSArray *myArray = @[@"关于我们",@"推荐好友",@"推荐好友",@"推荐好友"];
-//        
-//        cell.textLabel.text = myArray[indexPath.row];
-//        
-//        
-//        cell.imageView.image = [UIImage imageNamed:myArray[indexPath.row]];
-//        
-//        
-//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//        
-//        cell.imageView.image = [UIImage imageNamed:myArray[indexPath.row]];
-//    }else{
-////        cell.textLabel.text = @"退出登录";
-////        cell.imageView.frame = CGRectMake(0, 0, 300, 30);
-////        cell.tintAdjustmentMode= UIViewContentModeCenter;
-////        cell.detailTextLabel.text = @"大爷";
-//        
-//        UIButton *logOutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [logOutBtn setTitle:@"退出登录" forState:UIControlStateNormal];
-//        [logOutBtn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-//        logOutBtn.titleLabel.font = [UIFont systemFontOfSize:12];
-//        logOutBtn.frame = CGRectMake(0, 0, 400, 50);
-//        [cell.contentView addSubview:logOutBtn];
-//        [logOutBtn addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
-//        
-//    }
+    if (indexPath.section == 2){
+        cell.textLabel.text = nil;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        //退出登录按钮！！！
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 10, self.view.frame.size.width, 20)];
+        btn.titleLabel.font = [UIFont systemFontOfSize:15];
+        
+        [btn setTitle:@"退出登录" forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        
+        [cell.contentView addSubview:btn];
+        btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        btn.titleLabel.center =CGPointMake(ScreenW/2,0);
+        [btn addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
+    }
+
     
     
     return cell;
@@ -163,9 +146,16 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSLog(@"%ld",(long)indexPath.row);
     
+    if (indexPath.section == 1 && indexPath.row == 0) {
+        DSAboutUsViewController *aboutUs = [[DSAboutUsViewController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:aboutUs];
+        
+        [self presentViewController:nav animated:YES completion:nil];
+    }
+    
     if (indexPath.section == 0 && indexPath.row == 1) {
         DSBindingPhoneViewController *binding = [[DSBindingPhoneViewController alloc] init];
-//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:binding];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:binding];
         
         [self.navigationController pushViewController:binding animated:YES];
     }
@@ -193,16 +183,26 @@
 
 -(void)logout{
     NSLog(@"点击了退出登录");
+    
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"提示" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles: nil];
+    sheet.delegate = self;
+    [sheet showInView:self.view];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1) {
+        NSLog(@"取消");
+    }else{
+        NSLog(@"确定");
+//        DSLoginViewController *login = [[DSLoginViewController alloc] init];
+//        [self presentViewController:login animated:YES completion:^{
+//            
+//        }];
+        
+    }
+    
 }
-*/
+
+
 
 @end

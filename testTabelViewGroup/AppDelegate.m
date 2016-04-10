@@ -49,6 +49,8 @@
     [UMSocialWechatHandler setWXAppId:@"wx52a05695820cd6f1" appSecret:@"b02ae5ad5361548d8c07aa1886ea5ccf" url:nil];
     [UMSocialQQHandler setQQWithAppId:@"1105131399" appKey:@"FfIS8NdNp6dLHBQf" url:@"http://www.baidu.com"];
     // Override point for customization after application launch.
+    
+    application.statusBarStyle = UIStatusBarStyleLightContent;
     return YES;
 }
 
